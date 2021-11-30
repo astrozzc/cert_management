@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  cert_management:
+      build:
+          context: .
+      working_dir: /code
+      entrypoint:
+        - ./run_server.sh
+      environment:
+        - DATABASE_NAME=postgres
+        - DATABASE_USER=postgres
+        - DATABASE_PASSWORD=postgres
+        - DATABASE_HOST=db
+      privileged: true
+      ports:
+          - 9080:8000
+      volumes:
+        - '.:/code/'
+      links:
+        - db
+      depends_on:
+        - db
+
+  db:
+    image: postgres
+    environment:
+    - POSTGRES_DB=postgres
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
