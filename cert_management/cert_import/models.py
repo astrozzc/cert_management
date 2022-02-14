@@ -11,10 +11,11 @@ class Certificate(models.Model):
     issuer = models.CharField(max_length=200, null=True)
     subject = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=50, null=True)
+    cert_type = models.CharField(max_length=50)
 
 class Host(models.Model):
     """A host object."""
 
     name = models.CharField(max_length=100, unique=True, primary_key=True)
-    cert_in_use = models.ForeignKey(Certificate, on_delete=models.SET_NULL, null=True, related_name="hosts")
+    certs_in_use = models.ManyToManyField(Certificate, related_name="hosts")
     certs = models.ManyToManyField(Certificate, related_name="dns_list")
